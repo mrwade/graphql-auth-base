@@ -1,7 +1,11 @@
 type Mutation {
+  # Step 1: User requests a sign up token
   requestSignUp(email: String!): RequestSignUpResult!
-  signUp(email: String!, verifyCode: String!, password: String!): AuthResult!
 
+  # Step 2: User completes sign up
+  signUp(email: String!, token: String!, password: String!): AuthResult!
+
+  # Ongoing: User signs in
   signIn(email: String!, password: String!): AuthResult!
 }
 

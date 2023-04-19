@@ -47,7 +47,7 @@ export type GqlMutationSignInArgs = {
 export type GqlMutationSignUpArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
-  verifyCode: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type GqlQuery = {
@@ -167,7 +167,7 @@ export type GqlMeAccessorsResolvers<ContextType = any, ParentType extends GqlRes
 export type GqlMutationResolvers<ContextType = any, ParentType extends GqlResolversParentTypes['Mutation'] = GqlResolversParentTypes['Mutation']> = {
   requestSignUp?: Resolver<GqlResolversTypes['RequestSignUpResult'], ParentType, ContextType, RequireFields<GqlMutationRequestSignUpArgs, 'email'>>;
   signIn?: Resolver<GqlResolversTypes['AuthResult'], ParentType, ContextType, RequireFields<GqlMutationSignInArgs, 'email' | 'password'>>;
-  signUp?: Resolver<GqlResolversTypes['AuthResult'], ParentType, ContextType, RequireFields<GqlMutationSignUpArgs, 'email' | 'password' | 'verifyCode'>>;
+  signUp?: Resolver<GqlResolversTypes['AuthResult'], ParentType, ContextType, RequireFields<GqlMutationSignUpArgs, 'email' | 'password' | 'token'>>;
 };
 
 export type GqlQueryResolvers<ContextType = any, ParentType extends GqlResolversParentTypes['Query'] = GqlResolversParentTypes['Query']> = {
