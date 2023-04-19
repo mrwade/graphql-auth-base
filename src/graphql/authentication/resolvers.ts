@@ -1,11 +1,10 @@
 import bcrypt from 'bcrypt';
 import { GraphQLError } from 'graphql';
-import invariant from 'invariant';
-import jwt from 'jsonwebtoken';
 import { DateTime } from 'luxon';
-import { GqlResolvers } from '../../generated/graphql';
-import db, { genId } from '../../modules/db';
 import { nanoid } from 'nanoid';
+import { GqlResolvers } from '../../generated/graphql';
+import Auth from '../../modules/auth';
+import db, { genId } from '../../modules/db';
 
 const SALT_ROUNDS = process.env.NODE_ENV === 'test' ? 1 : 10;
 
@@ -67,14 +66,22 @@ const authResolvers: GqlResolvers = {
         }),
       ]);
 
-      // generate auth token
-      invariant(process.env.JWT_SECRET, 'JWT_SECRET not set');
-      const authToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
-
-      return { authToken };
+      // return auth token
+      return { authToken: Auth.createAuthToken(user) };
     },
 
-    // signIn: () => {},
+    signIn: async (_, { email, password }) => {
+      const user = await db.user.findUnique({ where: { email } });
+      if (!user)
+        throw new GraphQLError('Email/password combination is invalid');
+
+      // verify password
+      const validPassword = await bcrypt.compare(password, user.passwordHash);
+      if (!validPassword)
+        throw new GraphQLError('Email/password combination is invalid');
+
+      return { authToken: Auth.createAuthToken(user) };
+    },
   },
 };
 
