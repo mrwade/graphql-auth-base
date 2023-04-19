@@ -1,5 +1,5 @@
 {
-  "name": "ultimate-graphql-stack",
+  "name": "graphql-auth-base",
   "version": "1.0.0",
   "main": "src/index.js",
   "license": "MIT",
@@ -8,10 +8,13 @@
   },
   "scripts": {
     "build": "rimraf dist && swc ./src -d dist",
+    "build:prisma": "prisma generate",
+    "build:types": "graphql-codegen --config codegen.ts",
     "db:console": "docker compose run postgres psql -h localhost -U postgres -d webapp_dev",
     "db:migrate": "knex migrate:latest",
     "docker:db:migrate": "docker compose run backend pnpm db:migrate",
     "docker:db:migrate:undo": "docker compose run backend pnpx knex migrate:down",
+    "docker:db:reset": "docker compose rm --force --stop postgres && docker compose up -d && docker compose run backend pnpm knex migrate:latest && pnpm docker:seed:dev",
     "docker:seed:dev": "docker compose run backend pnpm ts-node scripts/seed/dev.ts",
     "rebuild:be": "docker compose build backend && docker compose rm --force --stop backend && docker compose up -d backend",
     "start": "node dist/index.js",
@@ -19,8 +22,11 @@
     "watch": "watchy --no-init-spawn --debounce 1 -w src -- docker-compose restart backend"
   },
   "dependencies": {
+    "@apollo/server": "^4.6.0",
+    "@graphql-tools/load-files": "^6.6.1",
     "@prisma/client": "^4.13.0",
     "express": "^4.18.2",
+    "graphql": "^16.6.0",
     "knex": "^2.4.2",
     "morgan": "^1.10.0",
     "nanoid": "^3.3.6",
@@ -28,6 +34,9 @@
     "typescript": "^5.0.4"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "3.3.0",
+    "@graphql-codegen/typescript": "3.0.3",
+    "@graphql-codegen/typescript-resolvers": "3.2.0",
     "@swc/cli": "^0.1.62",
     "@swc/core": "^1.3.52",
     "@tsconfig/node18": "^1.0.3",

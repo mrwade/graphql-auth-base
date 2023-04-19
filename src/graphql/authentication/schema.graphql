@@ -1,0 +1,14 @@
+type Mutation {
+  requestSignUp(email: String!): RequestSignUpResult!
+  signUp(email: String!, verifyCode: String!, password: String!): AuthResult!
+
+  signIn(email: String!, password: String!): AuthResult!
+}
+
+type RequestSignUpResult {
+  success: Boolean!
+}
+
+type AuthResult {
+  authToken: String!
+}
