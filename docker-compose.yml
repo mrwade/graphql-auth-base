@@ -23,4 +23,5 @@ services:
     command: pnpm start:docker
     environment:
       DATABASE_URL: postgres://postgres@postgres/webapp_dev
+      NODE_ENV: development
       PORT: 5000

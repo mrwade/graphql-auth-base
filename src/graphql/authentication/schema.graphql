@@ -1,5 +1,5 @@
 type Mutation {
-  # Step 1: User requests a sign up token
+  # Step 1: User requests a sign up token (aka: email verification)
   requestSignUp(email: String!): RequestSignUpResult!
 
   # Step 2: User completes sign up
